@@ -256,7 +256,8 @@ class Spoofing_train(Dataset):
             image_name = videoname + s + '.jpg'
             bbox_name = videoname + s + '.dat'
             bbox_path = os.path.join(image_path, bbox_name)
-            s = "_%03d_depth1D" % image_id
+            # s = "_%03d_depth1D" % image_id
+            s = "_%03d_depth" % image_id
             map_name = videoname + s + '.jpg'
             map_path2 = os.path.join(map_path, map_name)
         

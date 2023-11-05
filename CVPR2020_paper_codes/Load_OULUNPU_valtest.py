@@ -150,7 +150,8 @@ class Spoofing_valtest(Dataset):
             
             for temp in range(50):
                 s = "_%03d_scene" % image_id
-                s1 = "_%03d_depth1D" % image_id
+                # s1 = "_%03d_depth1D" % image_id
+                s1 = "_%03d_depth" % image_id
                 image_name = videoname + s + '.jpg'
                 map_name = videoname + s1 + '.jpg'
                 bbox_name = videoname + s + '.dat'

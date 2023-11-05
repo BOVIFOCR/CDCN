@@ -47,17 +47,27 @@ from utils import AvgrageMeter, accuracy, performances
 
 
 # Dataset root
-train_image_dir = '/wrk/yuzitong/DONOTREMOVE/OULU/Train_images/'        
-val_image_dir = '/wrk/yuzitong/DONOTREMOVE/OULU/Dev_images/'     
-test_image_dir = '/wrk/yuzitong/DONOTREMOVE/OULU/Test_images/'   
+OULU_PREFIX = "/home/rgpa18/ssan_datasets/original/oulu-npu/"
+# train_image_dir = '/wrk/yuzitong/DONOTREMOVE/OULU/Train_images/'        
+# val_image_dir = '/wrk/yuzitong/DONOTREMOVE/OULU/Dev_images/'     
+# test_image_dir = '/wrk/yuzitong/DONOTREMOVE/OULU/Test_images/'   
+train_image_dir = OULU_PREFIX + "train/"
+val_image_dir = OULU_PREFIX + "dev/"
+test_image_dir = OULU_PREFIX + "test/"
    
-map_dir = '/wrk/yuzitong/DONOTREMOVE/OULU/IJCB_re/OULUtrain_images/'   
-val_map_dir = '/wrk/yuzitong/DONOTREMOVE/OULU/IJCB_re/OULUdev_images/' 
-test_map_dir = '/wrk/yuzitong/DONOTREMOVE/OULU/IJCB_re/OULUtest_images/' 
+# map_dir = '/wrk/yuzitong/DONOTREMOVE/OULU/IJCB_re/OULUtrain_images/'   
+# val_map_dir = '/wrk/yuzitong/DONOTREMOVE/OULU/IJCB_re/OULUdev_images/' 
+# test_map_dir = '/wrk/yuzitong/DONOTREMOVE/OULU/IJCB_re/OULUtest_images/' 
+map_dir = OULU_PREFIX + "depth/train/"
+val_map_dir = OULU_PREFIX + "depth/dev/"
+test_map_dir = OULU_PREFIX + "depth/test/"
 
-train_list = '/wrk/yuzitong/DONOTREMOVE/OULU/OULU_Protocols/Protocol_1/Train.txt'
-val_list = '/wrk/yuzitong/DONOTREMOVE/OULU/OULU_Protocols/Protocol_1/Dev.txt'
-test_list =  '/wrk/yuzitong/DONOTREMOVE/OULU/OULU_Protocols/Protocol_1/Test.txt'
+# train_list = '/wrk/yuzitong/DONOTREMOVE/OULU/OULU_Protocols/Protocol_1/Train.txt'
+# val_list = '/wrk/yuzitong/DONOTREMOVE/OULU/OULU_Protocols/Protocol_1/Dev.txt'
+# test_list =  '/wrk/yuzitong/DONOTREMOVE/OULU/OULU_Protocols/Protocol_1/Test.txt'
+train_list = OULU_PREFIX + "Protocols/Protocol_1/Train.txt"
+val_list = OULU_PREFIX + "Protocols/Protocol_1/Dev.txt"
+test_list = OULU_PREFIX + "Protocols/Protocol_1/Test.txt"
  
 
 
