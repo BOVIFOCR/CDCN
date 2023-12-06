@@ -138,7 +138,8 @@ class Spoofing_valtest(Dataset):
 
     def get_single_image_x(self, image_path, val_map_path, videoname):
 
-        files_total = len([name for name in os.listdir(image_path) if os.path.isfile(os.path.join(image_path, name))])//3
+        # files_total = len([name for name in os.listdir(image_path) if os.path.isfile(os.path.join(image_path, name))])//3
+        files_total = len([name for name in os.listdir(image_path) if (os.path.isfile(os.path.join(image_path, name)) and name.endswith(".jpg"))])
         interval = files_total//10
         
         image_x = np.zeros((frames_total, 256, 256, 3))
@@ -146,12 +147,14 @@ class Spoofing_valtest(Dataset):
         
         # random choose 1 frame
         for ii in range(frames_total):
-            image_id = ii*interval + 1 
+            # image_id = ii*interval + 1 
+            image_id = 0
             
             for temp in range(50):
-                s = "_%03d_scene" % image_id
+                # s = "_%03d_scene" % image_id
+                s = f"_{image_id}"
                 # s1 = "_%03d_depth1D" % image_id
-                s1 = "_%03d_depth" % image_id
+                s1 = f"_{image_id}"
                 image_name = videoname + s + '.jpg'
                 map_name = videoname + s1 + '.jpg'
                 bbox_name = videoname + s + '.dat'
@@ -159,6 +162,10 @@ class Spoofing_valtest(Dataset):
                 val_map_path2 = os.path.join(val_map_path, map_name)
                 val_map_x_temp2 = cv2.imread(val_map_path2, 0)
             
+                assert os.path.exists(bbox_path) & os.path.exists(val_map_path2)
+                assert val_map_x_temp2 is not None
+                break
+                """
                 if os.path.exists(bbox_path) & os.path.exists(val_map_path2)  :    # some scene.dat are missing
                     if val_map_x_temp2 is not None:
                         break
@@ -166,6 +173,7 @@ class Spoofing_valtest(Dataset):
                         image_id +=1
                 else:
                     image_id +=1
+                """
                     
             # RGB
             image_path2 = os.path.join(image_path, image_name)
@@ -184,10 +192,3 @@ class Spoofing_valtest(Dataset):
             
 			
         return image_x, val_map_x
-
-
-
-            
- 
-
-
