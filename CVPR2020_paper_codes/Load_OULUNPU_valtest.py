@@ -95,10 +95,10 @@ class ToTensor_valtest(object):
         
         val_map_x = np.array(val_map_x)
                         
-        spoofing_label_np = np.array([0],dtype=np.long)
+        spoofing_label_np = np.array([0],dtype=np.longlong)
         spoofing_label_np[0] = spoofing_label
         
-        return {'image_x': torch.from_numpy(image_x.astype(np.float)).float(), 'val_map_x': torch.from_numpy(val_map_x.astype(np.float)).float(),'spoofing_label': torch.from_numpy(spoofing_label_np.astype(np.long)).long()} 
+        return {'image_x': torch.from_numpy(image_x.astype(np.float64)).float(), 'val_map_x': torch.from_numpy(val_map_x.astype(np.float64)).float(),'spoofing_label': torch.from_numpy(spoofing_label_np.astype(np.longlong)).long()} 
 
 
 # /home/ztyu/FAS_dataset/OULU/Train_images/          6_3_20_5_121_scene.jpg        6_3_20_5_121_scene.dat
@@ -121,14 +121,14 @@ class Spoofing_valtest(Dataset):
         videoname = str(self.landmarks_frame.iloc[idx, 1])
         image_path = os.path.join(self.root_dir, videoname)
         val_map_path = os.path.join(self.val_map_dir, videoname)
-             
-        image_x, val_map_x = self.get_single_image_x(image_path, val_map_path, videoname)
 		    
         spoofing_label = self.landmarks_frame.iloc[idx, 0]
         if spoofing_label == 1:
             spoofing_label = 1            # real
         else:
             spoofing_label = 0
+
+        image_x, val_map_x = self.get_single_image_x(image_path, val_map_path, videoname, spoofing_label)
             
         sample = {'image_x': image_x, 'val_map_x':val_map_x , 'spoofing_label': spoofing_label}
 
@@ -136,7 +136,7 @@ class Spoofing_valtest(Dataset):
             sample = self.transform(sample)
         return sample
 
-    def get_single_image_x(self, image_path, val_map_path, videoname):
+    def get_single_image_x(self, image_path, val_map_path, videoname, label):
 
         # files_total = len([name for name in os.listdir(image_path) if os.path.isfile(os.path.join(image_path, name))])//3
         files_total = len([name for name in os.listdir(image_path) if (os.path.isfile(os.path.join(image_path, name)) and name.endswith(".jpg"))])
@@ -160,11 +160,20 @@ class Spoofing_valtest(Dataset):
                 bbox_name = videoname + s + '.dat'
                 bbox_path = os.path.join(image_path, bbox_name)
                 val_map_path2 = os.path.join(val_map_path, map_name)
-                val_map_x_temp2 = cv2.imread(val_map_path2, 0)
+                if label == 1:
+                    val_map_x_temp2 = cv2.imread(val_map_path2, 0)
+                else:
+                    val_map_x_temp2 = val_map_x
             
-                assert os.path.exists(bbox_path) & os.path.exists(val_map_path2)
-                assert val_map_x_temp2 is not None
-                break
+                try:
+                    assert os.path.exists(bbox_path) & os.path.exists(val_map_path2)
+                    assert val_map_x_temp2 is not None
+                    break
+                except:
+                    print(os.path.exists(bbox_path), bbox_path)
+                    print(os.path.exists(val_map_path2), val_map_path2)
+                    print(val_map_x_temp2 is not None)
+                    exit(1)
                 """
                 if os.path.exists(bbox_path) & os.path.exists(val_map_path2)  :    # some scene.dat are missing
                     if val_map_x_temp2 is not None:

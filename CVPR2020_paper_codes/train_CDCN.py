@@ -47,7 +47,7 @@ from utils import AvgrageMeter, accuracy, performances
 
 
 # Dataset root
-OULU_PREFIX = "/home/rgpa18/ssan_datasets/original/oulu-npu/"
+OULU_PREFIX = "/home/rgpa18/ssan_datasets/oulu/"
 # train_image_dir = '/wrk/yuzitong/DONOTREMOVE/OULU/Train_images/'        
 # val_image_dir = '/wrk/yuzitong/DONOTREMOVE/OULU/Dev_images/'     
 # test_image_dir = '/wrk/yuzitong/DONOTREMOVE/OULU/Test_images/'   
@@ -65,9 +65,9 @@ test_map_dir = OULU_PREFIX + "depth/test"
 # train_list = '/wrk/yuzitong/DONOTREMOVE/OULU/OULU_Protocols/Protocol_1/Train.txt'
 # val_list = '/wrk/yuzitong/DONOTREMOVE/OULU/OULU_Protocols/Protocol_1/Dev.txt'
 # test_list =  '/wrk/yuzitong/DONOTREMOVE/OULU/OULU_Protocols/Protocol_1/Test.txt'
-train_list = OULU_PREFIX + "Protocols/Protocol_1/Train.txt"
-val_list = OULU_PREFIX + "Protocols/Protocol_1/Dev.txt"
-test_list = OULU_PREFIX + "Protocols/Protocol_1/Test.txt"
+train_list = OULU_PREFIX + "Protocols/Protocol_3/Train_1.txt"
+val_list = OULU_PREFIX + "Protocols/Protocol_3/Dev_1.txt"
+test_list = OULU_PREFIX + "Protocols/Protocol_3/Test_1.txt"
  
 
 
@@ -170,7 +170,7 @@ def contrast_depth_conv(input):
     
     kernel_filter = np.array(kernel_filter_list, np.float32)
     
-    kernel_filter = torch.from_numpy(kernel_filter.astype(np.float)).float().cuda()
+    kernel_filter = torch.from_numpy(kernel_filter.astype(np.float64)).float().cuda()
     # weights (in_channel, out_channel, kernel, kernel)
     kernel_filter = kernel_filter.unsqueeze(dim=1)
     
@@ -344,7 +344,7 @@ def train_test():
              epoch_test = 300   
         else:
             epoch_test = 20   
-        #epoch_test = 1
+        epoch_test = 1 # TODO tirar isso
         if epoch % epoch_test == epoch_test-1:    # test every 5 epochs  
             model.eval()
             

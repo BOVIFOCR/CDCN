@@ -129,7 +129,7 @@ class Cutout(object):
     def __call__(self, sample):
         img, map_x, spoofing_label = sample['image_x'], sample['map_x'],sample['spoofing_label']
         h, w = img.shape[1], img.shape[2]    # Tensor [1][2],  nparray [0][1]
-        mask = np.ones((h, w), np.float32)
+        mask = np.ones((h, w), np.float64)
         y = np.random.randint(h)
         x = np.random.randint(w)
         length_new = np.random.randint(1, self.length)
@@ -200,11 +200,11 @@ class ToTensor(object):
         map_x = np.array(map_x)
         
                         
-        spoofing_label_np = np.array([0],dtype=np.long)
+        spoofing_label_np = np.array([0],dtype=np.longlong)
         spoofing_label_np[0] = spoofing_label
         
         
-        return {'image_x': torch.from_numpy(image_x.astype(np.float)).float(), 'map_x': torch.from_numpy(map_x.astype(np.float)).float(), 'spoofing_label': torch.from_numpy(spoofing_label_np.astype(np.long)).long()}
+        return {'image_x': torch.from_numpy(image_x.astype(np.float64)).float(), 'map_x': torch.from_numpy(map_x.astype(np.float64)).float(), 'spoofing_label': torch.from_numpy(spoofing_label_np.astype(np.longlong)).long()}
 
 
 # /home/ztyu/FAS_dataset/OULU/Train_images/          6_3_20_5_121_scene.jpg        6_3_20_5_121_scene.dat

@@ -27,6 +27,17 @@ from sklearn import metrics
 from sklearn.metrics import roc_curve, auc
 import pdb
 
+def verbose_roc_curve(labels, scores, pos_label=1):
+    try:
+        return roc_curve(labels, scores, pos_label=1)
+    except ValueError:
+        labels = np.array(labels)
+        scores = np.nan_to_num(np.array(scores), posinf=1)
+        try:
+            return roc_curve(labels, scores, pos_label=1)
+        except ValueError:
+            raise ValueError("On ROC curve, range:", min(scores), max(scores))
+
 class AvgrageMeter(object):
 
   def __init__(self):
@@ -193,7 +204,9 @@ def performances(map_score_val_filename, map_score_test_filename):
         else:
             num_fake += 1
     
-    fpr,tpr,threshold = roc_curve(val_labels, val_scores, pos_label=1)
+    val_labels = np.array(val_labels)
+    val_scores = np.nan_to_num(np.array(val_scores), posinf=1)
+    fpr,tpr,threshold = verbose_roc_curve(val_labels, val_scores, pos_label=1)
     val_err, val_threshold = get_err_threhold(fpr, tpr, threshold)
     
     type1 = len([s for s in data if s['map_score'] <= val_threshold and s['label'] == 1])
@@ -239,7 +252,7 @@ def performances(map_score_val_filename, map_score_test_filename):
     
     
     # test based on test_threshold     
-    fpr_test,tpr_test,threshold_test = roc_curve(test_labels, test_scores, pos_label=1)
+    fpr_test,tpr_test,threshold_test = verbose_roc_curve(test_labels, test_scores, pos_label=1)
     err_test, best_test_threshold = get_err_threhold(fpr_test, tpr_test, threshold_test)
     
     type1 = len([s for s in data if s['map_score'] <= best_test_threshold and s['label'] == 1])
@@ -283,7 +296,7 @@ def performances_SiW_EER(map_score_val_filename):
         else:
             num_fake += 1
     
-    fpr,tpr,threshold = roc_curve(val_labels, val_scores, pos_label=1)
+    fpr,tpr,threshold = verbose_roc_curve(val_labels, val_scores, pos_label=1)
     val_err, val_threshold = get_err_threhold(fpr, tpr, threshold)
     
     type1 = len([s for s in data if s['map_score'] <= val_threshold and s['label'] == 1])
@@ -328,7 +341,7 @@ def performances_SiWM_EER(map_score_val_filename):
         else:
             num_fake += 1
     
-    fpr,tpr,threshold = roc_curve(val_labels, val_scores, pos_label=1)
+    fpr,tpr,threshold = verbose_roc_curve(val_labels, val_scores, pos_label=1)
     val_err, val_threshold = get_err_threhold(fpr, tpr, threshold)
     
     type1 = len([s for s in data if s['map_score'] <= val_threshold and s['label'] == 1])
@@ -387,7 +400,7 @@ def performances_CASIA_Replay(map_score_val_filename):
         else:
             num_fake += 1
     
-    fpr,tpr,threshold = roc_curve(val_labels, val_scores, pos_label=1)
+    fpr,tpr,threshold = verbose_roc_curve(val_labels, val_scores, pos_label=1)
     val_err, val_threshold, right_index = get_err_threhold_CASIA_Replay(fpr, tpr, threshold)
     
     type1 = len([s for s in data if s['map_score'] <= val_threshold and s['label'] == 1])
@@ -429,7 +442,7 @@ def performances_ZeroShot(map_score_val_filename):
         else:
             num_fake += 1
     
-    fpr,tpr,threshold = roc_curve(val_labels, val_scores, pos_label=1)
+    fpr,tpr,threshold = verbose_roc_curve(val_labels, val_scores, pos_label=1)
     auc_val = metrics.auc(fpr, tpr)
     
     val_err, val_threshold, right_index = get_err_threhold_CASIA_Replay(fpr, tpr, threshold)
